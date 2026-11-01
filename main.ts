@@ -1,31 +1,66 @@
 namespace SpriteKind {
     export const triangle = SpriteKind.create()
 }
-function update_player_controls () {
-    if (controller.up.isPressed()) {
-        Player_z += -1
-    }
-    if (controller.down.isPressed()) {
-        Player_z += 1
-    }
-    if (controller.right.isPressed()) {
-        Player_x += -1
-    }
-    if (controller.left.isPressed()) {
-        Player_x += 1
-    }
+function update_player_position () {
+    Player_x += player_vx
+    Player_y += player_vy
+    Player_z += player_vz
 }
+function change_player_x_y_z_vx_vy_vz_bysetting_num (setting: string, num: number) {
+    if (setting == "x") {
+        Player_x += num
+    } else if (setting == "y") {
+        Player_y += num
+    } else if (setting == "z") {
+        Player_z += num
+    } else if (setting == "vx") {
+        player_vx += num
+    } else if (setting == "vy") {
+        player_vy += num
+    } else if (setting == "vz") {
+        player_vz += num
+    }
+    update_mesh_position()
+}
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 1)
+})
 function convert_3D_cordinate_to_2D_cordinatex_y_z_x_or_y (x: number, y: number, z: number, x_or_y: string) {
     if (x_or_y == "x") {
-        return convert_to_standard_2D_cordinatesnum_x_or_y((x + Player_x) / (z + Player_z) * (zoom + 400), "x")
+        return convert_to_standard_2D_cordinatesnum_x_or_y((x + Player_x) / (z - Player_z) * (zoom - 400), "x")
+    } else if (x_or_y == "y") {
+        return convert_to_standard_2D_cordinatesnum_x_or_y((y + Player_y) / (z - Player_z) * (zoom - 400), "y")
     } else {
-        let Player_y = 0
-        return convert_to_standard_2D_cordinatesnum_x_or_y((y + Player_y) / (z + Player_z) * (zoom + 400), "y")
+        return 0
     }
 }
-function set_zoom_tozoom (zoom: number) {
-    zoom = zoom
-}
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", -1)
+})
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 1)
+})
+controller.down.onEvent(ControllerButtonEvent.Released, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0)
+})
+controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", -1)
+})
+controller.right.onEvent(ControllerButtonEvent.Released, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0)
+})
+controller.left.onEvent(ControllerButtonEvent.Released, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0)
+})
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 1)
+})
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0)
+})
+controller.up.onEvent(ControllerButtonEvent.Released, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0)
+})
 function draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, color: Image) {
     triangle = sprites.create(imagemapping.mappedImageToQuad(
     color,
@@ -155,42 +190,61 @@ function draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number, x2:
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
+        .3..............................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
-        .........................3......................................................................................................................................
         ................................................................................................................................................................
         `
     ), SpriteKind.triangle)
 }
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", -1)
+})
 function update_mesh_position () {
     sprites.destroyAllSpritesOfKind(SpriteKind.triangle)
     draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2(-10, -10, 100, 10, -10, 100, 0, 7, 100, img`
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+        22222222222222222222222222222222
+        2222222222222222222222222f222222
+        2222222222222222222f22222f222222
+        222222f222222222222f222222222222
+        222222f2222222222222222222222222
+        22222222222222222222222222222222
+        22222222222f22222222222222222222
+        22222222222f22222222222222222222
+        22222222222222222222222222222222
+        2222222222222222222222222222f222
+        22222222222222222222f2222222f222
+        22222222222222222222f22222222222
+        22222222222222222222222222222222
+        22222222222222222222222222222222
+        22222222222222222222222222222222
+        2f22222222222f222222222222222222
+        2f22222222222f2222222222222f2222
+        222222222222222222222222222f2222
+        2222222222222222222f222222222222
+        222222f222222222222f222222222222
+        222222f2222222222222222222222222
+        22222222222222222222222222222222
+        222222222222222f222222222f222222
+        222222222222222f222222222f222222
+        22222222f22222222222222222222222
+        22f22222f22222222222222222222222
+        22f222222222222222222222222222f2
+        222222222222222222222222222222f2
+        22222222222222222222222222222222
+        77777777777777777777777777777777
+        66666666666666666666666666666666
+        66666666666666666666666666666666
         `)
 }
-function change_zoom_byzoom (zoom: number) {
-    zoom += zoom
-}
-function set_player_movement_speed_tozoom (speed: number) {
-    Player_Movement_Speed = speed
+controller.B.onEvent(ControllerButtonEvent.Released, function () {
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0)
+})
+function set_zoom_to (zoom: number) {
+    zoom = zoom
 }
 function draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2 (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, x3: number, y3: number, z3: number, color: Image) {
     triangle = sprites.create(imagemapping.mappedImageToQuad(
@@ -321,50 +375,86 @@ function draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2 (x1: number, y1: n
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
+        .3..............................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
-        .........................3......................................................................................................................................
         ................................................................................................................................................................
         `
     ), SpriteKind.triangle)
 }
-function change_player_movement_speed_byzoom2 (speed: number) {
-    Player_Movement_Speed += speed
+function set_player_x_y_z_vx_vy_vz_tosetting_num (setting: string, num: number) {
+    if (setting == "x") {
+        Player_x = num
+    } else if (setting == "y") {
+        Player_y = num
+    } else if (setting == "z") {
+        Player_z = num
+    } else if (setting == "vx") {
+        player_vx = num
+    } else if (setting == "vy") {
+        player_vy = num
+    } else if (setting == "vz") {
+        player_vz = num
+    }
 }
 function convert_to_standard_2D_cordinatesnum_x_or_y (num: number, x_or_y: string) {
     if (x_or_y == "x") {
         return num + scene.screenWidth() / 2
-    } else {
+    } else if (x_or_y == "y") {
         return scene.screenHeight() / 2 - num
+    } else {
+        return 0
     }
 }
-let Player_Movement_Speed = 0
+function change_zoom_by (zoom: number) {
+    zoom += zoom
+}
 let triangle: Sprite = null
 let zoom = 0
-let Player_x = 0
+let player_vz = 0
 let Player_z = 0
+let player_vy = 0
+let Player_y = 0
+let player_vx = 0
+let Player_x = 0
 draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2(-10, -10, 100, 10, -10, 100, 0, 7, 100, img`
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    22222222222222222222222222222222
+    2222222222222222222222222f222222
+    2222222222222222222f22222f222222
+    222222f222222222222f222222222222
+    222222f2222222222222222222222222
+    22222222222222222222222222222222
+    22222222222f22222222222222222222
+    22222222222f22222222222222222222
+    22222222222222222222222222222222
+    2222222222222222222222222222f222
+    22222222222222222222f2222222f222
+    22222222222222222222f22222222222
+    22222222222222222222222222222222
+    22222222222222222222222222222222
+    22222222222222222222222222222222
+    2f22222222222f222222222222222222
+    2f22222222222f2222222222222f2222
+    222222222222222222222222222f2222
+    2222222222222222222f222222222222
+    222222f222222222222f222222222222
+    222222f2222222222222222222222222
+    22222222222222222222222222222222
+    222222222222222f222222222f222222
+    222222222222222f222222222f222222
+    22222222f22222222222222222222222
+    22f22222f22222222222222222222222
+    22f222222222222222222222222222f2
+    222222222222222222222222222222f2
+    22222222222222222222222222222222
+    77777777777777777777777777777777
+    66666666666666666666666666666666
+    66666666666666666666666666666666
     `)
 game.onUpdate(function () {
-    update_player_controls()
+    update_player_position()
     update_mesh_position()
 })
