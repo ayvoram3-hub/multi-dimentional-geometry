@@ -400,7 +400,7 @@ function set_player_x_y_z_vx_vy_vz_tosetting_num (setting: string, num: number) 
         player_vz = num
     }
 }
-// //% color="#1E90FF" icon="\uf1b2" block="Multi Dimen 3D"
+// % color="#1E90FF" icon="\uf1b2" block="Multi Dimen 3D"
 function convert_to_standard_2D_cordinatesnum_x_or_y (num: number, x_or_y: string) {
     if (x_or_y == "x") {
         return num + scene.screenWidth() / 2
