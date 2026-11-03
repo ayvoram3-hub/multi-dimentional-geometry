@@ -3,6 +3,27 @@ namespace SpriteKind {
     export const quadrilateral = SpriteKind.create()
 }
 function update_player_position () {
+    if (controller.up.isPressed()) {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vz", player_speed)
+    } else if (controller.down.isPressed()) {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0 - player_speed)
+    } else {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0)
+    }
+    if (controller.right.isPressed()) {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vx", player_speed)
+    } else if (controller.left.isPressed()) {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0 - player_speed)
+    } else {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0)
+    }
+    if (controller.A.isPressed()) {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vy", player_speed)
+    } else if (controller.B.isPressed()) {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0 - player_speed)
+    } else {
+        set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0)
+    }
     Player_x += player_vx
     Player_y += player_vy
     Player_z += player_vz
@@ -21,11 +42,7 @@ function change_player_x_y_z_vx_vy_vz_bysetting_num (setting: string, num: numbe
     } else if (setting == "vz") {
         player_vz += num
     }
-    update_mesh_position()
 }
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", player_speed)
-})
 function draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, x3: number, y3: number, z3: number, x4: number, y4: number, z4: number, color: Image) {
     triangle = sprites.create(imagemapping.mappedImageToQuad(
     color,
@@ -155,7 +172,7 @@ function draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color (x1: number, y
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
-        .3..............................................................................................................................................................
+        ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
@@ -167,46 +184,19 @@ function draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color (x1: number, y
 }
 function convert_3D_cordinate_to_2D_cordinatex_y_z_x_or_y (x: number, y: number, z: number, x_or_y: string) {
     if (x_or_y == "x") {
-        return convert_to_standard_2D_cordinatesnum_x_or_y((x + Player_x) / (z - Player_z) * zoom, "x")
+        return convert_to_standard_2D_cordinatesnum_x_or_y((x - Player_x) / (z - Player_z) * zoom, "x")
     } else if (x_or_y == "y") {
-        return convert_to_standard_2D_cordinatesnum_x_or_y((y + Player_y) / (z - Player_z) * zoom, "y")
+        return convert_to_standard_2D_cordinatesnum_x_or_y((y - Player_y) / (z - Player_z) * zoom, "y")
     } else {
         return 0
     }
 }
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0 - player_speed)
-})
 function set_player_speed_to (speed: number) {
     player_speed = speed
 }
 function change_player_speed_by (speed: number) {
     zoom = speed
 }
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", player_speed)
-})
-controller.down.onEvent(ControllerButtonEvent.Released, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0)
-})
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0 - player_speed)
-})
-controller.right.onEvent(ControllerButtonEvent.Released, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0)
-})
-controller.left.onEvent(ControllerButtonEvent.Released, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0)
-})
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", player_speed)
-})
-controller.A.onEvent(ControllerButtonEvent.Released, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0)
-})
-controller.up.onEvent(ControllerButtonEvent.Released, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0)
-})
 function draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, color: Image) {
     triangle = sprites.create(imagemapping.mappedImageToQuad(
     color,
@@ -336,7 +326,7 @@ function draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number, x2:
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
-        .3..............................................................................................................................................................
+        ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
@@ -346,13 +336,10 @@ function draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number, x2:
         `
     ), SpriteKind.triangle)
 }
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0 - player_speed)
-})
 function update_mesh_position () {
     sprites.destroyAllSpritesOfKind(SpriteKind.triangle)
     sprites.destroyAllSpritesOfKind(SpriteKind.quadrilateral)
-    draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2(-30, -30, 100, 0, 30, 100, 30, -30, 100, img`
+    draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color(-30, 40, 100, 30, 40, 100, -40, -40, 100, 40, -40, 100, img`
         22222222222222222222222222222222
         2222222222222222222222222f222222
         2222222222222222222f22222f222222
@@ -387,11 +374,8 @@ function update_mesh_position () {
         66666666666666666666666666666666
         `)
 }
-controller.B.onEvent(ControllerButtonEvent.Released, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0)
-})
-function set_zoom_to (zoom: number) {
-    zoom = zoom
+function set_zoom_to (new_zoom: number) {
+    zoom = new_zoom
 }
 function draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2 (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, x3: number, y3: number, z3: number, color: Image) {
     triangle = sprites.create(imagemapping.mappedImageToQuad(
@@ -522,7 +506,7 @@ function draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2 (x1: number, y1: n
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
-        .3..............................................................................................................................................................
+        ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
@@ -557,8 +541,8 @@ function convert_to_standard_2D_cordinatesnum_x_or_y (num: number, x_or_y: strin
         return 0
     }
 }
-function change_zoom_by (zoom: number) {
-    zoom += zoom
+function change_zoom_by (_new_zoom: number) {
+    zoom += _new_zoom
 }
 function draw_quadrilateral_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number, color: Image) {
     triangle = sprites.create(imagemapping.mappedImageToQuad(
@@ -689,7 +673,7 @@ function draw_quadrilateral_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
-        .3..............................................................................................................................................................
+        ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
@@ -699,17 +683,17 @@ function draw_quadrilateral_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number
         `
     ), SpriteKind.quadrilateral)
 }
+let zoom = 0
 let triangle: Sprite = null
-let player_speed = 0
 let player_vz = 0
 let Player_z = 0
 let player_vy = 0
 let Player_y = 0
 let player_vx = 0
 let Player_x = 0
-let zoom = 0
-zoom = 400
-set_player_speed_to(1)
+let player_speed = 0
+set_zoom_to(100)
+set_player_speed_to(5)
 draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color(1, 1, 1, 1, 1, 1, img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -727,40 +711,6 @@ draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color(1, 1, 1, 1, 1, 1, img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
-    `)
-draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color(-30, 40, 100, 30, 40, 100, -40, -40, 100, 40, -40, 100, img`
-    22222222222222222222222222222222
-    2222222222222222222222222f222222
-    2222222222222222222f22222f222222
-    222222f222222222222f222222222222
-    222222f2222222222222222222222222
-    22222222222222222222222222222222
-    22222222222f22222222222222222222
-    22222222222f22222222222222222222
-    22222222222222222222222222222222
-    2222222222222222222222222222f222
-    22222222222222222222f2222222f222
-    22222222222222222222f22222222222
-    22222222222222222222222222222222
-    22222222222222222222222222222222
-    22222222222222222222222222222222
-    2f22222222222f222222222222222222
-    2f22222222222f2222222222222f2222
-    222222222222222222222222222f2222
-    2222222222222222222f222222222222
-    222222f222222222222f222222222222
-    222222f2222222222222222222222222
-    22222222222222222222222222222222
-    222222222222222f222222222f222222
-    222222222222222f222222222f222222
-    22222222f22222222222222222222222
-    22f22222f22222222222222222222222
-    22f222222222222222222222222222f2
-    222222222222222222222222222222f2
-    22222222222222222222222222222222
-    77777777777777777777777777777777
-    66666666666666666666666666666666
-    66666666666666666666666666666666
     `)
 game.onUpdate(function () {
     update_player_position()
