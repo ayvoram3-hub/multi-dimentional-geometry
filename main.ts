@@ -24,7 +24,7 @@ function change_player_x_y_z_vx_vy_vz_bysetting_num (setting: string, num: numbe
     update_mesh_position()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 1)
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", player_speed)
 })
 function draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, x3: number, y3: number, z3: number, x4: number, y4: number, z4: number, color: Image) {
     triangle = sprites.create(imagemapping.mappedImageToQuad(
@@ -167,24 +167,30 @@ function draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color (x1: number, y
 }
 function convert_3D_cordinate_to_2D_cordinatex_y_z_x_or_y (x: number, y: number, z: number, x_or_y: string) {
     if (x_or_y == "x") {
-        return convert_to_standard_2D_cordinatesnum_x_or_y((x + Player_x) / (z - Player_z) * (zoom - 400), "x")
+        return convert_to_standard_2D_cordinatesnum_x_or_y((x + Player_x) / (z - Player_z) * zoom, "x")
     } else if (x_or_y == "y") {
-        return convert_to_standard_2D_cordinatesnum_x_or_y((y + Player_y) / (z - Player_z) * (zoom - 400), "y")
+        return convert_to_standard_2D_cordinatesnum_x_or_y((y + Player_y) / (z - Player_z) * zoom, "y")
     } else {
         return 0
     }
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", -1)
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0 - player_speed)
 })
+function set_player_speed_to (speed: number) {
+    player_speed = speed
+}
+function change_player_speed_by (speed: number) {
+    zoom = speed
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 1)
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vy", player_speed)
 })
 controller.down.onEvent(ControllerButtonEvent.Released, function () {
     set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", -1)
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0 - player_speed)
 })
 controller.right.onEvent(ControllerButtonEvent.Released, function () {
     set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0)
@@ -193,7 +199,7 @@ controller.left.onEvent(ControllerButtonEvent.Released, function () {
     set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 0)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", 1)
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vx", player_speed)
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     set_player_x_y_z_vx_vy_vz_tosetting_num("vy", 0)
@@ -341,12 +347,12 @@ function draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number, x2:
     ), SpriteKind.triangle)
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", -1)
+    set_player_x_y_z_vx_vy_vz_tosetting_num("vz", 0 - player_speed)
 })
 function update_mesh_position () {
     sprites.destroyAllSpritesOfKind(SpriteKind.triangle)
     sprites.destroyAllSpritesOfKind(SpriteKind.quadrilateral)
-    draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color(-30, 40, 1000, 30, 40, 1000, -40, -40, 1000, 40, -40, 1000, img`
+    draw_triangle_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color2(-30, -30, 100, 0, 30, 100, 30, -30, 100, img`
         22222222222222222222222222222222
         2222222222222222222222222f222222
         2222222222222222222f22222f222222
@@ -693,14 +699,35 @@ function draw_quadrilateral_in_2Dx1_y1_x2_y2_x3_y3_color (x1: number, y1: number
         `
     ), SpriteKind.quadrilateral)
 }
-let zoom = 0
 let triangle: Sprite = null
+let player_speed = 0
 let player_vz = 0
 let Player_z = 0
 let player_vy = 0
 let Player_y = 0
 let player_vx = 0
 let Player_x = 0
+let zoom = 0
+zoom = 400
+set_player_speed_to(1)
+draw_triangle_in_2Dx1_y1_x2_y2_x3_y3_color(1, 1, 1, 1, 1, 1, img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `)
 draw_quadrilateral_in_3Dx1_y1_z1_x2_y2_z2_x3_y3_z3_color(-30, 40, 100, 30, 40, 100, -40, -40, 100, 40, -40, 100, img`
     22222222222222222222222222222222
     2222222222222222222222222f222222
